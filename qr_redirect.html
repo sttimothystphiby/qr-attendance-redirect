@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instant Attendance Redirect</title>
+    <!-- Tailwind CSS for a clean, modern look -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Ensures the loading page covers the screen before redirecting */
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.5s;
+        }
+    </style>
+</head>
+<body class="bg-indigo-50 min-h-screen flex items-center justify-center p-4">
+
+    <div id="status-card" class="bg-white p-8 md:p-12 rounded-xl shadow-2xl max-w-lg w-full text-center">
+        <h1 class="text-3xl font-bold text-indigo-700 mb-4">Processing Attendance...</h1>
+        <p class="text-gray-600 mb-6">Please wait while we securely redirect you to the Google Form.</p>
+        
+        <div class="flex justify-center mb-6">
+            <svg class="animate-spin h-8 w-8 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+        </div>
+
+        <p id="message" class="text-sm text-red-500 font-medium"></p>
+        <p id="debug" class="text-xs text-gray-400 mt-4"></p>
+    </div>
+
+    <script>
+        // --- CONFIGURATION: UPDATE THESE VALUES ---
+
+        // 1. Paste the Base URL of your Google Form here (everything BEFORE the '?').
+        // EXAMPLE: 'https://docs.google.com/forms/d/e/1FAIpQLSfp_EXAMPLE_ID_s5iX/viewform'
+        const FORM_BASE_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSeish-mfinKWmlwcIOsuVfOiQ5cIILVC_FO2s3EqMujYeO1zg/viewform'; 
+
+        // 2. Paste the unique Entry ID for the Student ID field (e.g., entry.123456789).
+        // EXAMPLE: 'entry.123456789'
+        const STUDENT_ID_ENTRY_ID = 'entry.44000050'; 
+
+        // ------------------------------------------
+        
+        const messageEl = document.getElementById('message');
+        const debugEl = document.getElementById('debug');
+        
+        // This function executes immediately when the page loads
+        function doRedirect() {
+            // Check if configuration is set (only needed if the user hadn't provided the IDs yet)
+            if (STUDENT_ID_ENTRY_ID.includes('PASTE_YOUR')) {
+                messageEl.textContent = 'ERROR: The STUDENT_ID_ENTRY_ID is not set. Please update the configuration in the script.';
+                return;
+            }
+
+            // 1. Get the URL parameter 'id'
+            const urlParams = new URLSearchParams(window.location.search);
+            const studentId = urlParams.get('id');
+
+            if (!studentId) {
+                messageEl.textContent = 'Error: No student ID found in URL. URL must contain ?id=STUDENT_ID';
+                debugEl.textContent = 'Current URL search: ' + window.location.search;
+                return;
+            }
+
+            // 2. Construct the final, pre-filled Google Form URL
+            const redirectUrl = FORM_BASE_URL + 
+                                '?usp=pp_url&' + 
+                                STUDENT_ID_ENTRY_ID + 
+                                '=' + 
+                                encodeURIComponent(studentId);
+
+            // 3. Perform the instant client-side redirect
+            // This is the clean, non-Apps Script redirect that will work immediately.
+            debugEl.textContent = 'Redirecting to: ' + redirectUrl.substring(0, 100) + '...';
+            window.location.replace(redirectUrl);
+        }
+
+        // Execute the redirect logic
+        document.addEventListener('DOMContentLoaded', doRedirect);
+    </script>
+</body>
+</html>
