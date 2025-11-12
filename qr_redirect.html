@@ -33,19 +33,19 @@
 
     <script>
         // --- CONFIGURATION: UPDATE THESE VALUES ---
-
+console.log("Starting config check."); // Line 1
         // 1. Paste the Base URL of your Google Form here (everything BEFORE the '?').
         // EXAMPLE: 'https://docs.google.com/forms/d/e/1FAIpQLSfp_EXAMPLE_ID_s5iX/viewform'
         const FORM_BASE_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSeish-mfinKWmlwcIOsuVfOiQ5cIILVC_FO2s3EqMujYeO1zg/viewform'; 
-
+console.log("Base URL defined."); // Line 2
         // 2. Paste the unique Entry ID for the Student ID field (e.g., entry.123456789).
         // EXAMPLE: 'entry.123456789'
         const STUDENT_ID_ENTRY_ID = 'entry.44000050'; 
-
-	// 2. Paste the unique Entry ID for the Student Name field (e.g., entry.123456789).
+console.log("ID Entry defined."); // Line 3
+		// 3. Paste the unique Entry ID for the Student Name field (e.g., entry.123456789).
         // EXAMPLE: 'entry.123456789'
-        const STUDENT_Name_ENTRY_ID = 'entry.813670683'; 
-
+      	const STUDENT_NAME_ENTRY_ID = 'entry.813670683';
+console.log("Name Entry defined."); // Line 3
 
         // ------------------------------------------
         
@@ -64,7 +64,11 @@
             const urlParams = new URLSearchParams(window.location.search);
             const studentId = urlParams.get('id');
 	        const studentName = urlParams.get('name');
-	
+	// -----------------------------------------------------------------
+    console.log("URL Search String:", window.location.search);
+    console.log("Retrieved Student ID:", studentId);
+    console.log("Retrieved Student Name:", studentName);
+			
 	// 1. Check if configuration is set (only needed if the user hadn't provided the IDs yet)
 	if (!STUDENT_ID_ENTRY_ID.includes('entry.') || !STUDENT_NAME_ENTRY_ID.includes('entry.')) { messageEl.textContent = 'ERROR: The STUDENT_ID_ENTRY_ID or STUDENT_NAME_ENTRY_ID is not set. Please update the configuration in the script.'; return; }
         
@@ -85,4 +89,5 @@
     </script>
 </body>
 </html>
+
 
