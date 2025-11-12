@@ -42,6 +42,11 @@
         // EXAMPLE: 'entry.123456789'
         const STUDENT_ID_ENTRY_ID = 'entry.44000050'; 
 
+	// 2. Paste the unique Entry ID for the Student Name field (e.g., entry.123456789).
+        // EXAMPLE: 'entry.123456789'
+        const STUDENT_Name_ENTRY_ID = 'entry.813670683'; 
+
+
         // ------------------------------------------
         
         const messageEl = document.getElementById('message');
@@ -58,21 +63,18 @@
             // 1. Get the URL parameter 'id'
             const urlParams = new URLSearchParams(window.location.search);
             const studentId = urlParams.get('id');
+	        const studentName = urlParams.get('name');
+	
+	// 1. Check if configuration is set (only needed if the user hadn't provided the IDs yet)
+	if (!STUDENT_ID_ENTRY_ID.includes('entry.') || !STUDENT_NAME_ENTRY_ID.includes('entry.')) { messageEl.textContent = 'ERROR: The STUDENT_ID_ENTRY_ID or STUDENT_NAME_ENTRY_ID is not set. Please update the configuration in the script.'; return; }
+        
+	   // 2. Get the URL parameters. 
+	if (!studentId || !studentName) { let missing = []; if (!studentId) missing.push('ID'); if (!studentName) missing.push('Name'); messageEl.textContent = `Error: Missing URL parameter(s): ${missing.join(' and ')}. URL must contain ?id=STUDENT_ID&name=STUDENT_NAME`; debugEl.textContent = 'Current URL search: ' + window.location.search; return; }         
 
-            if (!studentId) {
-                messageEl.textContent = 'Error: No student ID found in URL. URL must contain ?id=STUDENT_ID';
-                debugEl.textContent = 'Current URL search: ' + window.location.search;
-                return;
-            }
+            // 3. Construct the final, pre-filled Google Form URL
+            cconst redirectURL = `${FORM_BASE_URL}?${STUDENT_ID_ENTRY_ID}=${encodeURIComponent(studentId)}&${STUDENT_NAME_ENTRY_ID}=${encodeURIComponent(studentName)}`;
 
-            // 2. Construct the final, pre-filled Google Form URL
-            const redirectUrl = FORM_BASE_URL + 
-                                '?usp=pp_url&' + 
-                                STUDENT_ID_ENTRY_ID + 
-                                '=' + 
-                                encodeURIComponent(studentId);
-
-            // 3. Perform the instant client-side redirect
+            // 4. Perform the instant client-side redirect
             // This is the clean, non-Apps Script redirect that will work immediately.
             debugEl.textContent = 'Redirecting to: ' + redirectUrl.substring(0, 100) + '...';
             window.location.replace(redirectUrl);
@@ -83,4 +85,3 @@
     </script>
 </body>
 </html>
-
