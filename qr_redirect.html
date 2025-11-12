@@ -76,8 +76,9 @@ console.log("Name Entry defined."); // Line 3
 	if (!studentId || !studentName) { let missing = []; if (!studentId) missing.push('ID'); if (!studentName) missing.push('Name'); messageEl.textContent = `Error: Missing URL parameter(s): ${missing.join(' and ')}. URL must contain ?id=STUDENT_ID&name=STUDENT_NAME`; debugEl.textContent = 'Current URL search: ' + window.location.search; return; }         
 
             // 3. Construct the final, pre-filled Google Form URL
-            const redirectURL = `${FORM_BASE_URL}?${STUDENT_ID_ENTRY_ID}=${encodeURIComponent(studentId)}&${STUDENT_NAME_ENTRY_ID}=${encodeURIComponent(studentName)}`;
-
+            const redirectUrl = `${FORM_BASE_URL}?${STUDENT_ID_ENTRY_ID}=${encodeURIComponent(studentId)}&${STUDENT_NAME_ENTRY_ID}=${encodeURIComponent(studentName)}`;
+console.log("Retrieved RedirectUrl:", redirectUrl);
+			
             // 4. Perform the instant client-side redirect
             // This is the clean, non-Apps Script redirect that will work immediately.
             debugEl.textContent = 'Redirecting to: ' + redirectUrl.substring(0, 100) + '...';
@@ -89,5 +90,6 @@ console.log("Name Entry defined."); // Line 3
     </script>
 </body>
 </html>
+
 
 
